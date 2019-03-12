@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace = "ReadProduct">
+     <typeAlias alias="ReadProduct" type="com.hahucomputers.wawiproducts.ReadProduct"/>
+     
+     <!-- Inserts new record  * checked with db attributes * -->
+    <insert id = "insertSoldproduct" parameterClass = "ReadProduct">
+       insert into dailysell(
+        barcode_id, item_name, item_qty, cust_name, paid, city, _month, _date, unit_price, total_price, sent_killo, rec_killo 
+        ) 
+        values (
+        #barcode_id#, #item_name#, #item_qty#, #cust_name#, #paid#, #city#, #_month#, #_date#, #unit_price#, #total_price#, #sent_killo#, #rec_killo#)
+     
+    </insert>
+    
+    
+         <!-- Inserts new record to quick sell * chcked with db*-->
+  
+      <insert id = "insertQuickSell" parameterClass = "ReadProduct">
+        insert into dailysell(
+        barcode_id, item_name, item_qty, cust_name,  _date,  unit_price,  total_price
+        ) 
+        values (
+        #barcode_id#, #item_name#, #item_qty#, #cust_name#, #_date#, #unit_price#, #total_price#)
+     
+     </insert>
+     
+     <!-- No methods are used other than the above two-->
+  
+</sqlMap>

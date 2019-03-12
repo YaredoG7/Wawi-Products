@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace = "RegisterProduct">
+     <typeAlias alias="Registerproduct" type="com.hahucomputers.wawiproducts.RegisterProduct"/>
+     
+<!-- Inserts new record -->
+<insert id = "RegisterProduct" parameterClass = "RegisterProduct">
+  insert into register_product(
+   barcode_id, item_name, item_vol, item_qty, in_store, left_in_stock, unit_price, _date, registered_by, prod_date, exp_date,  _comment 
+   ) 
+   values (
+   #barcode_id#, #item_name#, #item_vol#, #item_qty#, #in_store#, #left_in_stock#, #unit_price#, #_date#, #registered_by#, #prod_date#,  #exp_date#,#_comment#) 
+</insert>
+
+
+ <!-- Inserts items to stock when new items are registered -->
+
+<insert id = "StockProduct" parameterClass = "RegisterProduct">
+   insert into stock_products(
+    barcode_id, item_name, item_qty, comment) 
+    values (
+    #barcode_id#, #item_name#,  #item_qty#, #comment#) 
+</insert>    
+
+
+    
+<!--     selects all products-->
+<select id = "selectRegisterProduct" parameterClass = "RegisterProduct" resultClass = "RegisterProduct">
+
+    select * from register_product;
+
+</select>
+    
+<!--     selects products based on barcode id-->
+
+  <select id = "selectBarcode" parameterClass = "RegisterProduct" resultClass = "RegisterProduct">
+
+        select * from stock_products
+      <dynamic prepend="where">
+      <isNotNull  property="barcode_id">
+         barcode_id = #barcode_id#
+      </isNotNull >
+
+       </dynamic>
+
+</select>
+
+
+     <!--     selects products based on barcode id-->
+     <!--     get quantity based on the bar code id provided-->
+
+<select id = "selectQty" parameterClass = "RegisterProduct" resultClass = "RegisterProduct">
+
+      select item_qty from stock_products
+    <dynamic prepend="where">
+    <isNotNull  property="barcode_id">
+       barcode_id = #barcode_id#
+    </isNotNull >
+
+     </dynamic>
+
+</select>
+    
+<!--     selects products based on barcode id-->
+<!--     get date based on the bar code id provided-->
+
+ <select id = "selectDate" parameterClass = "RegisterProduct" resultClass = "RegisterProduct">
+
+       select _date from register_product
+     <dynamic prepend="where">
+     <isNotNull  property="barcode_id">
+        barcode_id = #barcode_id#
+     </isNotNull >
+
+      </dynamic>
+
+</select>
+
+<!--     update the comments so that I can bring it up when its running low-->
+    <update id = "updateCommentProd" parameterClass = "RegisterProduct">
+        update stock_products set comment = #comment# 
+        where barcode_id = #barcode_id#
+    </update>
+    
+  
+  <!--    the following updates the In-stock table based on sell or register  -->
+  <update id = "updateQty" parameterClass = "RegisterProduct">
+      update stock_products set item_qty = #item_qty# 
+      where barcode_id = #barcode_id#
+  </update>
+  
+        
+<!--     update the name on upate product details -->
+  <update id = "updateName" parameterClass = "RegisterProduct">
+      update register_product set item_name = #item_name# 
+      where barcode_id = #barcode_id#
+  </update>
+
+<!--     update the price on upate product details -->
+  <update id = "updatePrice" parameterClass = "RegisterProduct">
+      update register_product set item_name = #item_name# 
+      where barcode_id = #barcode_id#
+  </update>
+    
+    
+<delete id = "deleteSoldproduct" parameterClass = "int">
+
+    delete from register_product where barcode_id = #barcode_id#
+
+</delete>
+
+
+</sqlMap>
